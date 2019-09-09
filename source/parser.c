@@ -105,7 +105,7 @@ void menugen_parser_destroy(struct menugen_parser *self) {
 #define ISITEM(obj) IS(obj, garcon_menu_item_get_type())
 #define ISSEP(obj) IS(obj, garcon_menu_separator_get_type())
 
-static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, menugen_parser_cb callback, void *arg) {
+static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, menugen_parser_cb callback) {
     void *nextarg = NULL;
     int children = 0;
 
@@ -124,15 +124,15 @@ static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, me
                 .name = garcon_menu_directory_get_name(directory),
                 .icon = garcon_menu_directory_get_icon_name(directory)
             };
-            nextarg = callback(&item, arg);
+            nextarg = callback(&item);
         }
 
         if (!nextarg)
-            nextarg = arg;
+            nextarg = NULL;
 
         for (GList *el = elements; el != NULL; el = el->next) {
             GarconMenuElement *me = el->data;
-            children += walk_menu(me, self, callback, nextarg);
+            children += walk_menu(me, self, callback);
         }
 
         g_list_free(elements);
@@ -145,7 +145,7 @@ static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, me
                 .icon = garcon_menu_directory_get_icon_name(directory),
                 .prevarg = nextarg
             };
-            callback(&item, arg);
+            callback(&item);
         }
 
     } else if (ISITEM(element)) {
@@ -159,7 +159,7 @@ static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, me
                 .icon = garcon_menu_item_get_icon_name(gmi),
                 .command = command
             };
-            callback(&item, arg);
+            callback(&item);
             free(command);
             children = 1;
         }
@@ -168,7 +168,7 @@ static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, me
         struct menu_item item = {
             .type = SEPARATOR
         };
-        callback(&item, arg);
+        callback(&item);
         children = 1;
     } else {
         printf("Unknown type: %s\n",
@@ -179,6 +179,6 @@ static int walk_menu(GarconMenuElement *element, struct menugen_parser *self, me
 }
 
 
-void menugen_parser_apply(struct menugen_parser *self, menugen_parser_cb cb, void *arg) {
-    walk_menu((GarconMenuElement*)self->menu, self, cb, arg);
+void menugen_parser_apply(struct menugen_parser *self, menugen_parser_cb cb) {
+    walk_menu((GarconMenuElement*)self->menu, self, cb);
 }
