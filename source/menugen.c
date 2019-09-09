@@ -22,9 +22,9 @@ static void *process_menu_item(struct menu_item *item, void *arg) {
     case MENUEND:
         /* sub_menu */
         if (g_strdup (item->icon) == NULL) {
-          printf("%s,submenu,%s\n", item->name, "applications-other");
+          printf("%s,%s,%s\n", item->prevarg, "applications-other");
         } else {
-          printf("%s,submenu,%s\n", item->name, item->icon);
+          printf("%s,%s,%s\n", item->name, item->prevarg, item->icon);
         }
         break;
 
