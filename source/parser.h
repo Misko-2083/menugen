@@ -17,10 +17,11 @@ struct menu_item {
     void *prevarg;
 };
 
-typedef void* (*menugen_parser_cb)(struct menu_item *item, void *arg);
+typedef void* (*menugen_parser_cb)(struct menu_item *item);
 
 struct menugen_parser *menugen_parser_init(char *desktop, char *file);
 void menugen_parser_destroy(struct menugen_parser *self);
-void menugen_parser_apply(struct menugen_parser *self, menugen_parser_cb cb, void *arg);
+void menugen_parser_apply(struct menugen_parser *self, menugen_parser_cb cb);
 
 #endif /* PARSER_H_ */
+
