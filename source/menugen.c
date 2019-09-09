@@ -7,25 +7,24 @@
 
 #define STR_IS_EMPTY(str) ((str) == NULL || *(str) == '\0')
 
-
-
-static void *process_menu_item(struct menu_item *item, void *arg) {
+static void *process_menu_item(struct menu_item *item) {
     void *result = NULL;
-
+    
     switch (item->type) {
     case MENU:
 
         printf("\n%s,^checkout(%s),%s\n\n", item->name, item->name, item->icon);
-        printf("^tag(%s)\n", item->name);
+        printf("\n^tag(%s)\n", item->name);
         break;
 
     case MENUEND:
-        /* sub_menu */
+        /* sub_dir? not sure how this works!
         if (g_strdup (item->icon) == NULL) {
-          printf("%s,%s,%s\n", item->prevarg, "applications-other");
+          printf("\n%s,%p,%s\n", item->name, item->prevarg, "applications-other");
         } else {
-          printf("%s,%s,%s\n", item->name, item->prevarg, item->icon);
+          printf("\n%s,%p,%s\n", item->name, item->prevarg, item->icon);
         }
+        */
         break;
 
     case SEPARATOR:
